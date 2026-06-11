@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>¿Salís conmigo? 🌸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   PALETA  ·  Mix neón + sakura
+   night     #0a0a1f
+   cyan      #22d3ee
+   neon-pink #ff4ecd
+   sakura    #ffb7d5
+   violet    #a855f7
+   cream     #fdf2f8
+========================================================= */
+:root{
+  --night:#0a0a1f; --cyan:#22d3ee; --pink:#ff4ecd;
+  --sakura:#ffb7d5; --violet:#a855f7; --cream:#fdf2f8;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Zen Maru Gothic',sans-serif;color:var(--cream);
+  background:
+    radial-gradient(1200px 700px at 50% -10%, #1b1146 0%, transparent 60%),
+    radial-gradient(900px 600px at 85% 110%, #3a0f4d 0%, transparent 55%),
+    radial-gradient(900px 600px at 10% 100%, #0c2a4d 0%, transparent 55%),
+    var(--night);
+  overflow:hidden;position:relative;
+}
+
+/* ---- decoración kanji de fondo ---- */
+.kanji{position:fixed;font-family:'Mochiy Pop One',sans-serif;color:#ffffff;
+  opacity:.035;user-select:none;pointer-events:none;z-index:0;line-height:1;font-weight:400}
+.kanji.k1{top:6%;left:4%;font-size:clamp(60px,18vw,200px)}
+.kanji.k2{bottom:14%;right:5%;font-size:clamp(50px,14vw,170px)}
+.kanji.k3{top:42%;right:32%;font-size:clamp(40px,10vw,120px);opacity:.025}
+
+/* ---- piso synthwave ---- */
+.grid-floor{position:fixed;left:50%;bottom:-10vh;width:300vw;height:80vh;
+  transform:translateX(-50%) perspective(340px) rotateX(74deg);
+  background-image:
+    linear-gradient(var(--cyan) 1px,transparent 1px),
+    linear-gradient(90deg,var(--pink) 1px,transparent 1px);
+  background-size:48px 48px;background-position:center bottom;
+  opacity:.28;z-index:0;animation:floor 5s linear infinite;
+  -webkit-mask-image:linear-gradient(to top,#000 0%,transparent 78%);
+  mask-image:linear-gradient(to top,#000 0%,transparent 78%);}
+@keyframes floor{from{background-position-y:0}to{background-position-y:48px}}
+.sun{position:fixed;bottom:18vh;left:50%;transform:translateX(-50%);
+  width:min(60vw,420px);height:min(60vw,420px);border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,#ff8fd4,#ff4ecd 55%,#7a1f6b 100%);
+  filter:blur(2px);opacity:.45;z-index:0;
+  -webkit-mask-image:repeating-linear-gradient(#000 0 14px,transparent 14px 22px);
+  mask-image:repeating-linear-gradient(#000 0 14px,transparent 14px 22px);}
+
+/* ---- petalos canvas ---- */
+#petals{position:fixed;inset:0;z-index:1;pointer-events:none}
+
+/* ---- musica ---- */
+.mute{position:fixed;top:14px;right:14px;z-index:50;width:46px;height:46px;border-radius:50%;
+  border:1.5px solid rgba(255,180,213,.5);background:rgba(20,10,40,.55);backdrop-filter:blur(6px);
+  color:var(--sakura);font-size:20px;cursor:pointer;display:grid;place-items:center;
+  transition:transform .2s,box-shadow .2s}
+.mute:hover{transform:scale(1.08);box-shadow:0 0 18px rgba(255,78,205,.6)}
+.mute:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+/* ---- escenas ---- */
+.stage{position:relative;z-index:5;min-height:100dvh;display:grid;place-items:center;padding:24px}
+.scene{position:absolute;inset:0;display:grid;place-items:center;padding:24px;
+  opacity:0;transform:translateY(22px) scale(.98);pointer-events:none;
+  transition:opacity .55s ease,transform .55s cubic-bezier(.2,.9,.25,1)}
+.scene.active{opacity:1;transform:none;pointer-events:auto}
+.card{width:min(560px,100%);text-align:center}
+
+/* eyebrow / kana */
+.kana{font-family:'Mochiy Pop One',sans-serif;color:var(--cyan);
+  letter-spacing:.35em;font-size:13px;text-shadow:0 0 12px rgba(34,211,238,.7);margin-bottom:14px}
+
+/* titulos neon */
+h1{font-family:'Orbitron',sans-serif;font-weight:900;line-height:1.05;
+  font-size:clamp(30px,8.5vw,58px);letter-spacing:.5px;
+  color:#fff;text-shadow:0 0 8px #fff,0 0 22px var(--pink),0 0 48px var(--pink),0 0 80px var(--violet);
+  animation:flick 6s infinite}
+@keyframes flick{0%,97%,100%{opacity:1}98%{opacity:.78}99%{opacity:.92}}
+h1 .name{display:inline-block;color:var(--sakura);
+  text-shadow:0 0 10px var(--sakura),0 0 30px var(--pink);animation:pop 2.6s ease-in-out infinite}
+@keyframes pop{50%{transform:translateY(-4px) rotate(-1.5deg)}}
+.sub{font-size:clamp(15px,4vw,19px);color:#e7d7ef;margin-top:18px;font-weight:500;opacity:.92}
+.q-title{font-family:'Mochiy Pop One',sans-serif;font-size:clamp(22px,6vw,34px);
+  color:#fff;text-shadow:0 0 14px var(--pink),0 0 34px var(--violet);margin-bottom:6px}
+.q-help{color:#c9b6d6;font-size:14px;margin-bottom:26px}
+
+/* botones SI / NO */
+.choose{margin-top:38px;display:flex;gap:22px;justify-content:center;align-items:center;
+  flex-wrap:wrap;position:relative;min-height:120px}
+.btn{font-family:'Mochiy Pop One',sans-serif;border:none;cursor:pointer;border-radius:999px;
+  position:relative;transition:transform .18s,box-shadow .25s,filter .25s}
+.btn small{display:block;font-size:.55em;letter-spacing:.2em;opacity:.85;font-weight:400}
+.btn-si{background:linear-gradient(135deg,var(--pink),var(--violet));color:#fff;
+  padding:22px 46px;font-size:26px;
+  box-shadow:0 0 0 2px rgba(255,255,255,.25),0 0 26px var(--pink),0 12px 30px rgba(255,78,205,.45);
+  animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{50%{transform:scale(1.06)}}
+.btn-si:hover{transform:scale(1.1);filter:brightness(1.12)}
+.btn-si:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}
+.btn-no{background:rgba(20,12,40,.7);color:#b79fc9;border:1.5px solid rgba(255,255,255,.18);
+  padding:14px 26px;font-size:16px;backdrop-filter:blur(4px)}
+.btn-no.run{position:absolute}
+
+/* opciones (día / comida) */
+.opts{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:30px}
+.opt{font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;
+  border:1.6px solid rgba(255,180,213,.35);background:rgba(255,255,255,.04);
+  color:var(--cream);border-radius:16px;padding:16px 22px;font-size:16px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px;
+  transition:transform .2s,box-shadow .25s,border-color .25s,background .25s}
+.opt .emo{font-size:26px;line-height:1}
+.opt:hover{transform:translateY(-3px);border-color:var(--cyan);box-shadow:0 0 18px rgba(34,211,238,.35)}
+.opt.sel{border-color:var(--pink);background:linear-gradient(135deg,rgba(255,78,205,.25),rgba(168,85,247,.22));
+  box-shadow:0 0 0 1.5px var(--pink),0 0 26px rgba(255,78,205,.55);transform:translateY(-2px)}
+.opt:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+/* inputs */
+.field{text-align:left;margin:0 auto 18px;max-width:420px}
+.field label{display:block;font-size:13px;color:var(--sakura);margin-bottom:7px;
+  font-weight:700;letter-spacing:.04em}
+.field input{width:100%;font-family:'Zen Maru Gothic',sans-serif;font-size:16px;color:#fff;
+  background:rgba(255,255,255,.06);border:1.6px solid rgba(255,180,213,.3);
+  border-radius:14px;padding:14px 16px;transition:border-color .2s,box-shadow .2s}
+.field input::placeholder{color:#9d86b0}
+.field input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.22)}
+.geo{margin-top:10px;width:100%;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;
+  cursor:pointer;border:1.5px dashed rgba(34,211,238,.55);background:rgba(34,211,238,.08);
+  color:var(--cyan);border-radius:12px;padding:11px 14px;font-size:14px;
+  transition:background .2s,transform .15s}
+.geo:hover{background:rgba(34,211,238,.16);transform:translateY(-1px)}
+.geo:active{transform:scale(.98)}
+.geo:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.geo-msg{font-size:12.5px;color:var(--sakura);margin-top:8px;min-height:16px}
+
+/* CTAs de avance */
+.next{font-family:'Mochiy Pop One',sans-serif;cursor:pointer;border:none;border-radius:999px;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));color:#06121f;font-weight:400;
+  padding:16px 40px;font-size:18px;margin-top:6px;
+  box-shadow:0 0 22px rgba(34,211,238,.5),0 10px 26px rgba(168,85,247,.4);
+  transition:transform .2s,filter .2s}
+.next:hover{transform:translateY(-2px) scale(1.03);filter:brightness(1.1)}
+.next:disabled{filter:grayscale(.7) brightness(.7);cursor:not-allowed;box-shadow:none;transform:none}
+.next:focus-visible{outline:3px solid var(--sakura);outline-offset:3px}
+.back{display:inline-block;margin-top:18px;color:#a991bd;font-size:13px;cursor:pointer;
+  background:none;border:none;font-family:inherit;letter-spacing:.03em}
+.back:hover{color:var(--cyan)}
+
+/* progreso */
+.dots{display:flex;gap:9px;justify-content:center;margin-bottom:26px}
+.dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18);transition:.3s}
+.dots i.on{background:var(--pink);box-shadow:0 0 12px var(--pink)}
+
+/* resumen */
+.recap{text-align:left;max-width:420px;margin:0 auto 26px;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,180,213,.28);
+  border-radius:18px;padding:20px 22px}
+.recap .row{display:flex;gap:12px;padding:9px 0;font-size:15px;align-items:flex-start;
+  border-bottom:1px dashed rgba(255,255,255,.1)}
+.recap .row:last-child{border-bottom:none}
+.recap .ic{font-size:18px}
+.recap .lab{color:var(--sakura);font-weight:700;min-width:78px}
+.recap .val{color:#fff;flex:1}
+.wa{font-family:'Mochiy Pop One',sans-serif;cursor:pointer;border:none;border-radius:999px;
+  background:linear-gradient(135deg,#25d366,#13b85a);color:#04240f;
+  padding:18px 38px;font-size:19px;display:inline-flex;align-items:center;gap:10px;
+  box-shadow:0 0 26px rgba(37,211,102,.55),0 12px 28px rgba(19,184,90,.4);
+  transition:transform .2s,filter .2s;animation:beat 1.7s ease-in-out infinite}
+.wa:hover{transform:scale(1.05);filter:brightness(1.08)}
+.wa:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.sent{margin-top:16px;color:var(--cyan);font-size:14px;min-height:20px}
+
+/* celebración */
+.celebrate{font-family:'Orbitron',sans-serif;font-weight:900;
+  font-size:clamp(46px,16vw,120px);color:#fff;
+  text-shadow:0 0 14px var(--sakura),0 0 40px var(--pink),0 0 90px var(--violet);
+  animation:siii .9s cubic-bezier(.18,1.4,.4,1) both}
+@keyframes siii{0%{transform:scale(0) rotate(-12deg);opacity:0}
+  60%{transform:scale(1.18) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+.celebrate-sub{font-family:'Mochiy Pop One',sans-serif;color:var(--sakura);
+  font-size:clamp(16px,5vw,22px);margin-top:10px;animation:fadeUp 1s .25s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:opacity .2s linear!important}
+  .grid-floor{animation:none}
+}
+@media (max-width:480px){
+  .opt{min-width:104px;padding:14px 16px}
+  .choose{gap:16px}
+}
+</style>
+</head>
+<body>
+  <div class="kanji k1">週末</div>
+  <div class="kanji k2">一緒に</div>
+  <div class="kanji k3">デート</div>
+  <div class="grid-floor"></div>
+  <div class="sun"></div>
+  <canvas id="petals"></canvas>
+
+  <button class="mute" id="muteBtn" aria-label="Música" title="Música on/off">♪</button>
+
+  <main class="stage">
+
+    <!-- 1 · PREGUNTA -->
+    <section class="scene active" id="s-ask">
+      <div class="card">
+        <div class="kana">SUPER · FORMAL · REQUEST</div>
+        <h1>¿Salís conmigo<br>este finde, <span class="name" id="nm">Consu</span>?</h1>
+        <p class="sub">Aviso: el botón del “no” está medio rebelde 👀</p>
+        <div class="choose" id="choose">
+          <button class="btn btn-si" id="yes">SÍ<small>はい</small></button>
+          <button class="btn btn-no" id="no">no<small>いいえ</small></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · CELEBRACIÓN -->
+    <section class="scene" id="s-cel">
+      <div class="card">
+        <div class="celebrate">¡SÍÍÍ!</div>
+        <div class="celebrate-sub">sabía que ibas a decir que sí 🌸</div>
+      </div>
+    </section>
+
+    <!-- 3 · DÍA -->
+    <section class="scene" id="s-day">
+      <div class="card">
+        <div class="dots"><i class="on"></i><i></i><i></i></div>
+        <div class="q-title">¿Qué día te queda mejor?</div>
+        <div class="q-help">Elegí uno y seguimos ✨</div>
+        <div class="opts" id="dayOpts"></div>
+      </div>
+    </section>
+
+    <!-- 4 · COMIDA -->
+    <section class="scene" id="s-food">
+      <div class="card">
+        <div class="dots"><i></i><i class="on"></i><i></i></div>
+        <div class="q-title">¿Qué estás tentada de comer?</div>
+        <div class="q-help">Podés elegir más de una 🍽️</div>
+        <div class="opts" id="foodOpts"></div>
+        <div class="field" id="otherWrap" style="display:none;max-width:340px">
+          <label for="otherFood">¿Qué otra cosa se te antoja?</label>
+          <input id="otherFood" type="text" placeholder="Escribilo acá…" autocomplete="off">
+        </div>
+        <button class="next" id="foodNext" disabled>Seguir →</button>
+        <div><button class="back" data-back="s-day">← volver</button></div>
+      </div>
+    </section>
+
+    <!-- 5 · DÓNDE / CUÁNDO -->
+    <section class="scene" id="s-where">
+      <div class="card">
+        <div class="dots"><i></i><i></i><i class="on"></i></div>
+        <div class="q-title">¿Dónde y a qué hora<br>te paso a buscar?</div>
+        <div class="q-help">Para llegar puntual (más o menos 😅)</div>
+        <div class="field">
+          <label for="addr">Dirección</label>
+          <input id="addr" type="text" placeholder="Calle, número, barrio…" autocomplete="off">
+          <button type="button" class="geo" id="geoBtn">📍 Usar mi ubicación actual</button>
+          <div class="geo-msg" id="geoMsg"></div>
+        </div>
+        <div class="field">
+          <label for="time">Horario</label>
+          <input id="time" type="time" value="21:00">
+        </div>
+        <button class="next" id="whereNext" disabled>Ver resumen →</button>
+        <div><button class="back" data-back="s-food">← volver</button></div>
+      </div>
+    </section>
+
+    <!-- 6 · RESUMEN + WHATSAPP -->
+    <section class="scene" id="s-done">
+      <div class="card">
+        <div class="q-title">¡Lo tenemos! 🎉</div>
+        <div class="q-help">Mandame esto y queda la cita confirmada 💌</div>
+        <div class="recap" id="recap"></div>
+        <button class="wa" id="waBtn">💚 Enviarle a <span id="sig">Franco</span></button>
+        <div class="sent" id="sent"></div>
+        <div><button class="back" data-back="s-where">← editar algo</button></div>
+      </div>
+    </section>
+
+  </main>
+
+<script>
+/* ============================================================
+   ⚙️  CONFIG — editá SOLO esto y listo
+   ============================================================ */
+const CONFIG = {
+  nombreElla : "Consu",                 // a quién invitás
+  firma      : "Franco",                // tu nombre
+  whatsapp   : "5493416674074",         // TU número, sin + ni espacios (54 9 area numero)
+  fechas: {
+    viernes: { label:"Viernes",  fecha:"12/06" },
+    sabado:  { label:"Sábado",   fecha:"13/06" }
+  },
+  comidas: [
+    { emo:"🍣", txt:"Sushi" },
+    { emo:"🍜", txt:"Ramen" },
+    { emo:"🍕", txt:"Pizza" },
+    { emo:"🍔", txt:"Hamburguesas" },
+    { emo:"🍝", txt:"Pasta" },
+    { emo:"🔥", txt:"Parrilla / Asado" },
+    { emo:"🍨", txt:"Helado / postre" },
+    { emo:"✨", txt:"Otros", other:true }
+  ]
+};
+/* ============================================================ */
+
+const $ = s => document.querySelector(s);
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const state = { day:null, foods:[], addr:"", time:"21:00" };
+
+/* textos dinámicos */
+$('#nm').textContent  = CONFIG.nombreElla;
+$('#sig').textContent = CONFIG.firma;
+document.title = `¿Salís conmigo, ${CONFIG.nombreElla}? 🌸`;
+
+/* ---------- navegación de escenas ---------- */
+function show(id){
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+  $('#'+id).classList.add('active');
+}
+document.querySelectorAll('.back').forEach(b=>b.onclick=()=>show(b.dataset.back));
+
+/* ---------- pétalos (canvas) ---------- */
+const cv=$('#petals'),ctx=cv.getContext('2d');
+let W,H,petals=[],burst=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+addEventListener('resize',resize);resize();
+function mkPetal(y){return{x:Math.random()*W,y:y??-20-Math.random()*H,
+  r:6+Math.random()*8,vy:.6+Math.random()*1.1,vx:-.4+Math.random()*.8,
+  sway:Math.random()*Math.PI*2,sp:.01+Math.random()*.03,
+  rot:Math.random()*6,vr:-.04+Math.random()*.08,
+  c:Math.random()<.25?'#ffe3ef':(Math.random()<.5?'#ffb7d5':'#ff8fd4'),a:.7+Math.random()*.3};}
+const N = reduce?0:34;
+for(let i=0;i<N;i++)petals.push(mkPetal(Math.random()*H));
+function petalShape(p){
+  ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.a;
+  ctx.fillStyle=p.c;ctx.beginPath();
+  ctx.moveTo(0,-p.r);
+  ctx.bezierCurveTo(p.r*.7,-p.r*.6,p.r*.6,p.r*.5,0,p.r);
+  ctx.bezierCurveTo(-p.r*.6,p.r*.5,-p.r*.7,-p.r*.6,0,-p.r);
+  ctx.fill();ctx.restore();
+}
+function loop(){
+  ctx.clearRect(0,0,W,H);
+  petals.forEach(p=>{
+    p.sway+=p.sp;p.x+=p.vx+Math.sin(p.sway)*.6;p.y+=p.vy;p.rot+=p.vr;
+    if(p.y>H+20){p.y=-20;p.x=Math.random()*W;}
+    petalShape(p);
+  });
+  for(let i=burst.length-1;i>=0;i--){
+    const p=burst[i];
+    p.vy+=p.g||.07;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.a-=p.fade||.006;
+    if(p.a<=0||p.y>H+40){burst.splice(i,1);continue;}
+    if(p.kind==='conf'){
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.max(0,p.a);
+      ctx.fillStyle=p.c;ctx.fillRect(-p.r,-p.r*.5,p.r*2,p.r);ctx.restore();
+    } else {
+      petalShape(p);
+    }
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+const CONF_COLORS=['#22d3ee','#ff4ecd','#ffb7d5','#a855f7','#ffe45e','#7CFFB2','#ffffff'];
+function spawnConfetti(n,cx,cy,power){
+  for(let i=0;i<n;i++){
+    const ang=Math.random()*Math.PI*2,spd=(2+Math.random()*7)*(power||1);
+    const conf=Math.random()<.6;
+    burst.push({kind:conf?'conf':'petal',
+      x:cx,y:cy,r:conf?(4+Math.random()*7):(6+Math.random()*9),
+      vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd-(3+Math.random()*3),
+      rot:Math.random()*6,vr:-.3+Math.random()*.6,
+      g:.06+Math.random()*.05,fade:.004+Math.random()*.004,a:1,
+      c:conf?CONF_COLORS[(Math.random()*CONF_COLORS.length)|0]:
+        (Math.random()<.4?'#ff8fd4':'#ffb7d5'),sway:0,sp:0});
+  }
+}
+function doBurst(){
+  if(reduce)return;
+  // triple estallido desde 3 puntos
+  spawnConfetti(120,W/2,H*.45,1.4);
+  setTimeout(()=>spawnConfetti(90,W*.2,H*.4,1.2),180);
+  setTimeout(()=>spawnConfetti(90,W*.8,H*.4,1.2),340);
+  setTimeout(()=>spawnConfetti(140,W/2,H*.5,1.6),520);
+  emojiRain(['🌸','🎉','💕','✨','🎊','🥳','💖','⭐']);
+  shake();
+}
+function miniBurst(x,y){ if(reduce)return; spawnConfetti(50,x,y,1.1); }
+
+/* lluvia de emojis (DOM) */
+function emojiRain(set){
+  if(reduce)return;
+  for(let i=0;i<26;i++){
+    const e=document.createElement('div');
+    e.textContent=set[(Math.random()*set.length)|0];
+    e.style.cssText=`position:fixed;z-index:40;pointer-events:none;
+      left:${Math.random()*100}vw;top:-10vh;font-size:${20+Math.random()*26}px;
+      will-change:transform,opacity;`;
+    document.body.appendChild(e);
+    const dur=2200+Math.random()*1800,drift=(-60+Math.random()*120);
+    e.animate([
+      {transform:`translate(0,0) rotate(0deg)`,opacity:1},
+      {transform:`translate(${drift}px,115vh) rotate(${-180+Math.random()*360}deg)`,opacity:.9}
+    ],{duration:dur,easing:'cubic-bezier(.3,.1,.5,1)'});
+    setTimeout(()=>e.remove(),dur);
+  }
+}
+/* screen shake */
+function shake(){
+  if(reduce)return;
+  const s=document.querySelector('.stage');
+  s.animate([
+    {transform:'translate(0,0)'},{transform:'translate(-8px,5px)'},
+    {transform:'translate(7px,-6px)'},{transform:'translate(-5px,4px)'},
+    {transform:'translate(4px,-3px)'},{transform:'translate(0,0)'}
+  ],{duration:480,easing:'ease-out'});
+}
+
+/* ---------- música (Web Audio, sin archivos) ---------- */
+let audio,master,playing=false,seqT,step=0,noiseBuf,shaper;
+const NOTES={A:55,G:49,F:43.65,E:41.20,C:65.41,D:73.42};
+const BASS=['A','A',null,'A','A',null,'G',null,'F',null,'F',null,'E',null,'E','A'];
+const KICK=[1,0,0,0,1,0,0,1,1,0,0,0,1,0,1,0];
+const LEADSCALE=[440,523.25,659.25,880,659.25,523.25]; // A minor pent arriba
+function distCurve(k){const n=256,c=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;c[i]=(1+k)*x/(1+k*Math.abs(x));}return c;}
+function initAudio(){
+  if(audio)return;
+  try{
+    audio=new (window.AudioContext||window.webkitAudioContext)();
+    master=audio.createGain();master.gain.value=0;master.connect(audio.destination);
+    // ruido para hats
+    const len=audio.sampleRate*1;noiseBuf=audio.createBuffer(1,len,audio.sampleRate);
+    const d=noiseBuf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+    shaper=audio.createWaveShaper();shaper.curve=distCurve(8);
+    playMusic();
+  }catch(e){}
+}
+function kick(t){
+  const o=audio.createOscillator(),g=audio.createGain();
+  o.frequency.setValueAtTime(160,t);o.frequency.exponentialRampToValueAtTime(45,t+.13);
+  g.gain.setValueAtTime(.9,t);g.gain.exponentialRampToValueAtTime(.001,t+.22);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+.24);
+}
+function hat(t,v){
+  const s=audio.createBufferSource(),g=audio.createGain(),hp=audio.createBiquadFilter();
+  s.buffer=noiseBuf;hp.type='highpass';hp.frequency.value=7000;
+  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);
+  s.connect(hp);hp.connect(g);g.connect(master);s.start(t);s.stop(t+.06);
+}
+function bass(t,f){
+  const o=audio.createOscillator(),g=audio.createGain(),lp=audio.createBiquadFilter();
+  o.type='sawtooth';o.frequency.value=f;lp.type='lowpass';lp.frequency.value=420;lp.Q.value=6;
+  g.gain.setValueAtTime(.0,t);g.gain.linearRampToValueAtTime(.5,t+.01);
+  g.gain.exponentialRampToValueAtTime(.02,t+.22);
+  o.connect(shaper);shaper.connect(lp);lp.connect(g);g.connect(master);
+  o.start(t);o.stop(t+.24);
+}
+function lead(t,f){
+  const o=audio.createOscillator(),g=audio.createGain(),lp=audio.createBiquadFilter();
+  o.type='square';o.frequency.value=f;lp.type='lowpass';lp.frequency.value=2600;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.1,t+.01);
+  g.gain.exponentialRampToValueAtTime(.001,t+.34);
+  o.connect(lp);lp.connect(g);g.connect(master);o.start(t);o.stop(t+.36);
+}
+function playMusic(){
+  playing=true;$('#muteBtn').textContent='♪';
+  master.gain.linearRampToValueAtTime(.5,audio.currentTime+.4);
+  clearInterval(seqT);
+  seqT=setInterval(()=>{
+    const t=audio.currentTime+.02,s=step%16;
+    if(KICK[s])kick(t);
+    hat(t,s%2?.18:.1);
+    const bn=BASS[s];if(bn)bass(t,NOTES[bn]);
+    if([0,3,6,10,12,14].includes(s))lead(t,LEADSCALE[(step>>1)%LEADSCALE.length]);
+    step++;
+  },112);
+}
+function toggleMusic(){
+  if(!audio){initAudio();return;}
+  if(playing){playing=false;clearInterval(seqT);
+    master.gain.linearRampToValueAtTime(0,audio.currentTime+.25);$('#muteBtn').textContent='🔇';}
+  else{playMusic();}
+}
+$('#muteBtn').onclick=toggleMusic;
+// arrancar audio en la primera interacción
+['click','touchstart','keydown'].forEach(ev=>
+  addEventListener(ev,()=>initAudio(),{once:true}));
+
+/* ---------- botón NO que escapa ---------- */
+const taunts=["¿segura?","dale...","ni ahí","jajaja no","probá de nuevo","imposible","el SÍ está acá →","no podés 😈"];
+let tcount=0;
+const noBtn=$('#no'),choose=$('#choose');
+function flee(){
+  const box=choose.getBoundingClientRect();
+  const bw=noBtn.offsetWidth,bh=noBtn.offsetHeight;
+  noBtn.classList.add('run');
+  const maxX=Math.max(0,box.width-bw),maxY=Math.max(0,box.height-bh);
+  noBtn.style.left=Math.random()*maxX+'px';
+  noBtn.style.top =Math.random()*maxY+'px';
+  const t=taunts[tcount%taunts.length];
+  noBtn.innerHTML=t+'<small>いいえ</small>';
+  tcount++;
+  noBtn.style.transform=`scale(${Math.max(.55,1-tcount*.06)})`;
+  // el SÍ se agranda un toque
+  $('#yes').style.transform=`scale(${Math.min(1.5,1+tcount*.05)})`;
+}
+['mouseenter','mousedown','touchstart','focus','click'].forEach(ev=>
+  noBtn.addEventListener(ev,e=>{e.preventDefault();flee();},{passive:false}));
+
+/* ---------- SÍ ---------- */
+$('#yes').onclick=()=>{
+  initAudio();
+  doBurst();
+  show('s-cel');
+  setTimeout(()=>{emojiRain(['💖','🌸','🎉','😆','💕']);doBurst();},900);
+  setTimeout(()=>{ buildDay(); show('s-day'); },2600);
+};
+
+/* ---------- preguntas: día ---------- */
+function buildDay(){
+  const wrap=$('#dayOpts');if(wrap.children.length)return;
+  Object.values(CONFIG.fechas).forEach(d=>{
+    const b=document.createElement('button');
+    b.className='opt';b.innerHTML=`<span class="emo">🗓️</span>${d.label}<small style="opacity:.7;font-size:12px">${d.fecha}</small>`;
+    b.onclick=ev=>{
+      state.day=`${d.label} ${d.fecha}`;
+      wrap.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+      b.classList.add('sel');
+      miniBurst(ev.clientX||W/2,ev.clientY||H/2);
+      setTimeout(()=>{buildFood();show('s-food');},460);
+    };
+    wrap.appendChild(b);
+  });
+}
+
+/* ---------- comida (multi) ---------- */
+function buildFood(){
+  const wrap=$('#foodOpts');if(wrap.children.length)return;
+  CONFIG.comidas.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='opt';b.dataset.txt=c.txt;b.innerHTML=`<span class="emo">${c.emo}</span>${c.txt}`;
+    b.onclick=ev=>{
+      b.classList.toggle('sel');
+      if(c.other)$('#otherWrap').style.display=b.classList.contains('sel')?'block':'none';
+      if(b.classList.contains('sel'))miniBurst(ev.clientX||W/2,ev.clientY||H/2);
+      refreshFood();
+    };
+    wrap.appendChild(b);
+  });
+  $('#otherFood').addEventListener('input',refreshFood);
+}
+function refreshFood(){
+  const sel=[...$('#foodOpts').querySelectorAll('.opt.sel')];
+  state.foods=sel.map(o=>{
+    if(o.dataset.txt==='Otros'){const v=$('#otherFood').value.trim();return v||'Otros';}
+    return o.dataset.txt;
+  });
+  $('#foodNext').disabled=state.foods.length===0;
+}
+$('#foodNext').onclick=()=>show('s-where');
+
+/* ---------- dónde / cuándo ---------- */
+const addr=$('#addr'),time=$('#time'),whereNext=$('#whereNext');
+function checkWhere(){whereNext.disabled=!(addr.value.trim()&&time.value);}
+addr.addEventListener('input',checkWhere);time.addEventListener('input',checkWhere);
+checkWhere();
+
+/* ubicación actual */
+$('#geoBtn').onclick=()=>{
+  const msg=$('#geoMsg');
+  msg.innerHTML='Activando GPS… 📡 <span style="opacity:.9">igual ya sé que sos de Hudson, no hace falta 😏🤣</span>';
+  if(!navigator.geolocation){msg.textContent='Tu navegador no soporta ubicación 🙈';return;}
+  setTimeout(()=>{
+    navigator.geolocation.getCurrentPosition(
+      pos=>{
+        const la=pos.coords.latitude.toFixed(5),ln=pos.coords.longitude.toFixed(5);
+        addr.value=`Mi ubicación 📍 https://maps.google.com/?q=${la},${ln}`;
+        msg.innerHTML='Confirmado: sos de Hudson 😭🤣 (igual te paso a buscar ❤️) ✅';
+        checkWhere();
+      },
+      ()=>{ msg.innerHTML='No pude obtener la ubicación, escribila a mano 🙏<br><span style="opacity:.85">(che, la ubi no funciona para gente de Hudson… lo lamento 🤣)</span>'; },
+      {enableHighAccuracy:true,timeout:8000}
+    );
+  },1300);
+};
+
+whereNext.onclick=()=>{
+  state.addr=addr.value.trim();state.time=time.value;
+  buildRecap();show('s-done');
+};
+
+/* ---------- resumen + whatsapp ---------- */
+function buildRecap(){
+  const rows=[
+    ['🗓️','Día',state.day],
+    ['🍽️','Antojo',state.foods.join(', ')],
+    ['📍','Dirección',state.addr],
+    ['🕘','Hora',state.time]
+  ];
+  $('#recap').innerHTML=rows.map(r=>
+    `<div class="row"><span class="ic">${r[0]}</span><span class="lab">${r[1]}</span><span class="val">${r[2]}</span></div>`
+  ).join('');
+}
+function waMessage(){
+  return `¡Hola ${CONFIG.firma}! 🎉 Dije que SÍ 💕\n\n`+
+         `🗓️ Día: ${state.day}\n`+
+         `🍽️ Tengo ganas de: ${state.foods.join(', ')}\n`+
+         `📍 Pasame a buscar a: ${state.addr}\n`+
+         `🕘 A las: ${state.time}\n\n`+
+         `¡Te espero! 🚗🌸`;
+}
+$('#waBtn').onclick=()=>{
+  doBurst();
+  const url=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(waMessage())}`;
+  window.open(url,'_blank');
+  $('#sent').textContent='Se abrió WhatsApp — dale enviar y listo 💌';
+};
+</script>
+</body>
+</html>
